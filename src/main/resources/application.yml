@@ -1,0 +1,29 @@
+server:
+  port: 8080
+spring:
+  redis:
+    database: 0
+    host: 47.102.134.66
+    port: 6379
+    password: 123456
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+  datasource:
+    primary:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://47.102.134.66:3306/mysql?characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSL=false
+      username: root
+      password: 123456
+      # Hikari will use the above plus the following to setup connection pooling
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+mybatis:
+  mapper-locations: classpath:/generator/*.xml
+logging:
+  level:
+    com.example.redis: debug
