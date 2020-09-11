@@ -2,7 +2,6 @@ package com.example.redis.mapper;
 
 import com.example.redis.dto.UserInfo;
 import com.example.redis.dto.UserInfoExample;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
