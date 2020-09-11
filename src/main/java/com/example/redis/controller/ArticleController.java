@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class ArticleController {
 
-    @Autowired
+    @Autowired(required = false)
     UserInfoMapper userInfoMapper;
 
     @Cacheable(value="article")

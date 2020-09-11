@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Mapper
 @Repository
 public interface UserInfoMapper {
     long countByExample(UserInfoExample example);

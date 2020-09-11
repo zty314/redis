@@ -5,7 +5,7 @@ spring:
     database: 0
     host: 47.102.134.66
     port: 6379
-    password: 123456
+    password: ENC(BN+9/HIFfSr3D649NP0hCA==)
     lettuce:
       pool:
         max-active: 8
@@ -16,8 +16,8 @@ spring:
     primary:
       driver-class-name: com.mysql.cj.jdbc.Driver
       jdbc-url: jdbc:mysql://47.102.134.66:3306/mysql?characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSL=false
-      username: root
-      password: 123456
+      username: ENC(m0UGzzBFJfGQdK1/oe1tCg==)
+      password: ENC(BN+9/HIFfSr3D649NP0hCA==)
       # Hikari will use the above plus the following to setup connection pooling
       max-lifetime: 1800000
       connection-timeout: 30000
@@ -27,3 +27,8 @@ mybatis:
 logging:
   level:
     com.example.redis: debug
+
+jasypt:
+  encryptor:
+    password: l&id81!lw
+    algorithm: PBEWithMD5AndDES
