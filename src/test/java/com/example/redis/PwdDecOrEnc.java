@@ -27,7 +27,7 @@ public class PwdDecOrEnc {
         config.setAlgorithm("PBEWithMD5AndDES");
         config.setPassword("l&id81!lw");
         encryptor.setConfig(config);
-        String name = encryptor.encrypt("root");
+        String name = encryptor.encrypt("6379");
         String password = encryptor.encrypt("123456");
 
         //解密

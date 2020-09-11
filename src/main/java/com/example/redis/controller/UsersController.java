@@ -19,7 +19,7 @@ public class UsersController {
     @Autowired(required = false)
     UserInfoMapper userInfoMapper;
 
-    @Cacheable(value = "users", key = "#user.userId", condition = "#id>0")
+    @Cacheable(value = "users", key = "#id", condition = "#id>0")
     @GetMapping("/users/{id}")
     public @ResponseBody
     Object getArticle(@PathVariable Integer id) {
@@ -35,7 +35,7 @@ public class UsersController {
         return isSuccess == 1;
     }
 
-    @CacheEvict(value = "users", key = "#user.userId")
+    @CacheEvict(value = "users", key = "#id")
     @DeleteMapping("/users/{id}")
     public @ResponseBody
     Object removeArticle(@PathVariable Integer id) {

@@ -1,9 +1,13 @@
 server:
   port: 8080
+caching:
+  ttlmap:
+    #key是缓存名称，value是缓存有效期
+    users: 10
 spring:
   redis:
     database: 0
-    host: 47.102.134.66
+    host: ENC(v7wYA0vNaELoKwRl4jqzk7PLyTZ8d1H5)
     port: 6379
     password: ENC(BN+9/HIFfSr3D649NP0hCA==)
     lettuce:
@@ -12,23 +16,33 @@ spring:
         max-wait: -1
         max-idle: 8
         min-idle: 0
-  datasource:
-    primary:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://47.102.134.66:3306/mysql?characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSL=false
-      username: ENC(m0UGzzBFJfGQdK1/oe1tCg==)
-      password: ENC(BN+9/HIFfSr3D649NP0hCA==)
-      # Hikari will use the above plus the following to setup connection pooling
-      max-lifetime: 1800000
-      connection-timeout: 30000
-      connection-test-query: SELECT 1
+  #spring配置缓存层为redis
+  cache:
+    type: redis
+    redis:
+      # Allow caching null values.
+      cache-null-values: true
+      # Whether to use the key prefix when writing to Redis.
+      use-key-prefix: true
+datasource:
+  primary:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    jdbc-url: jdbc:mysql://47.102.134.66:3306/mysql?characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSL=false
+    username: ENC(m0UGzzBFJfGQdK1/oe1tCg==)
+    password: ENC(BN+9/HIFfSr3D649NP0hCA==)
+    # Hikari will use the above plus the following to setup connection pooling
+    max-lifetime: 1800000
+    connection-timeout: 30000
+    connection-test-query: SELECT 1
 mybatis:
   mapper-locations: classpath:/generator/*.xml
 logging:
   level:
     com.example.redis: debug
 
+# 加密所需的salt(盐)
 jasypt:
   encryptor:
-    password: l&id81!lw
+    password: l&id81!lw            # 根密码用于加密
     algorithm: PBEWithMD5AndDES
+  # 加密方式默认为PBEWithMD5AndDES 可以更改为  PBEWithMD5AndTripleDES
