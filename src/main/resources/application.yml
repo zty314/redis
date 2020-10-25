@@ -14,7 +14,7 @@ spring:
 #      master: mymaster    #master节点名称,redis sentinel模式安装的时候会配置
 #      nodes: 47.102.134.66:26379 #,192.168.1.202:26379,192.168.1.203:26379      # 哨兵的IP:Port列表
 #    cluster:     #集群模式配置
-#      nodes: 192.168.1.11:6379,192.168.1.12:6379,192.168.1.13:6379,192.168.1.14:6379,192.168.1.15:6379,192.168.1.16:6379
+#      nodes: 47.102.134.66:7000,47.102.134.66:7001,47.102.134.66:7002
 #      max-redirects: 3  # 重定向的最大次数
     lettuce:
       pool:
@@ -26,10 +26,10 @@ spring:
   cache:
     type: redis
     redis:
-      # Allow caching null values.
-      cache-null-values: true
-      # Whether to use the key prefix when writing to Redis.
-      use-key-prefix: true
+      cache-null-values: true   # 缓存null，防止缓存穿透
+      use-key-prefix: true  # 是否使用缓存前缀
+      key-prefix: boot-launch  # 缓存前缀，缓存按应用分类
+      time-to-live:  3600  # 缓存到期时间，默认不主动删除永远不到期
 datasource:
   primary:
     driver-class-name: com.mysql.cj.jdbc.Driver
