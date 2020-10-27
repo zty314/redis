@@ -19,7 +19,12 @@ public class UsersController {
     @Autowired(required = false)
     UserInfoMapper userInfoMapper;
 
-    @Cacheable(value = "users", key = "#id", condition = "#id>0")
+    /**
+     * sync:只有一个线程去维护缓存，其他线程会被阻塞，直到缓存中更新该条目为止。也就是第一次查询只允许一个线程，等数据被缓存之后，才支持并发
+     * @param id
+     * @return
+     */
+    @Cacheable(value = "users", key = "#id", condition = "#id>0", sync = true)
     @GetMapping("/users/{id}")
     public @ResponseBody
     Object getArticle(@PathVariable Integer id) {

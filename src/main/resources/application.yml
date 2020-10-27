@@ -30,6 +30,9 @@ spring:
       use-key-prefix: true  # 是否使用缓存前缀
       key-prefix: boot-launch  # 缓存前缀，缓存按应用分类
       time-to-live:  3600  # 缓存到期时间，默认不主动删除永远不到期
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${web.upload-path}
+
 datasource:
   primary:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -52,3 +55,13 @@ jasypt:
     password: l&id81!lw            # 根密码用于加密
     algorithm: PBEWithMD5AndDES
   # 加密方式默认为PBEWithMD5AndDES 可以更改为  PBEWithMD5AndTripleDES
+
+#为与项目代码分离的静态资源路径，即：文件上传保存根路径
+web:
+  upload-path: D:/data/
+
+# MinIo文件服务器
+minio:
+  endpoint: http://47.102.134.66:9000
+  accessKey: PStwBjhgQ1Oee/zHcyP6Qg== # zty314
+  secretKey: m22LcoMpFeaMt/oz0M3+Qx984Rw8ASvd # !QAZ2wsx

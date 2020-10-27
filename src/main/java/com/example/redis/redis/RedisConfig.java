@@ -20,13 +20,12 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
-
 @Data
 @Configuration
-@Component
-@ConfigurationProperties(prefix = "caching")
+@ConfigurationProperties(prefix = "caching")  //application.yml配置前缀
 public class RedisConfig {
-    //这个函数是上一节的内容
+
+    //11.4章节代码，不是本节内容
     @Bean
     public RedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate redisTemplate = new RedisTemplate();
@@ -39,7 +38,7 @@ public class RedisConfig {
 
         jackson2JsonRedisSerializer.setObjectMapper(objectMapper);
 
-        //重点在这四行代码
+        //序列化重点在这四行代码
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
@@ -50,36 +49,40 @@ public class RedisConfig {
     }
 
 
-    //本节的重点配置，让Redis缓存的序列化方式使用redisTemplate.getValueSerializer()
-    //不在使用JDK默认的序列化方式
+    //从这里开始改造
+    //自定义redisCacheManager
     @Bean
     public RedisCacheManager redisCacheManager(RedisTemplate redisTemplate) {
         RedisCacheWriter redisCacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(redisTemplate.getConnectionFactory());
-        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(redisTemplate.getValueSerializer()));
-        return new RedisCacheManager(redisCacheWriter, redisCacheConfiguration);
+
+        RedisCacheManager redisCacheManager = new RedisCacheManager(redisCacheWriter,
+                this.buildRedisCacheConfigurationWithTTL(redisTemplate,RedisCacheConfiguration.defaultCacheConfig().getTtl().getSeconds()),  //默认的redis缓存配置
+                this.getRedisCacheConfigurationMap(redisTemplate)); //针对每一个cache做个性化缓存配置
+
+        return  redisCacheManager;
     }
 
     //配置注入，key是缓存名称，value是缓存有效期
-    private Map<String, Long> ttlmap;
+    private Map<String,Long> ttlmap;  //lombok提供getset方法
 
     //根据ttlmap的属性装配结果，个性化RedisCacheConfiguration
     private Map<String, RedisCacheConfiguration> getRedisCacheConfigurationMap(RedisTemplate redisTemplate) {
         Map<String, RedisCacheConfiguration> redisCacheConfigurationMap = new HashMap<>();
 
-        for (Map.Entry<String, Long> entry : ttlmap.entrySet()) {
+        for(Map.Entry<String, Long> entry : ttlmap.entrySet()){
             String cacheName = entry.getKey();
             Long ttl = entry.getValue();
-            redisCacheConfigurationMap.put(cacheName, this.buildRedisCacheConfigurationWithTTL(redisTemplate, ttl));
+            redisCacheConfigurationMap.put(cacheName,this.buildRedisCacheConfigurationWithTTL(redisTemplate,ttl));
         }
 
         return redisCacheConfigurationMap;
     }
 
-    //让缓存的序列化方式使用redisTemplate.getValueSerializer()，并未每一个缓存分别设置ttl
-    private RedisCacheConfiguration buildRedisCacheConfigurationWithTTL(RedisTemplate redisTemplate, Long ttl) {
-        return RedisCacheConfiguration.defaultCacheConfig()
+    //根据传参构建缓存配置
+    private RedisCacheConfiguration buildRedisCacheConfigurationWithTTL(RedisTemplate redisTemplate,Long ttl){
+        return  RedisCacheConfiguration.defaultCacheConfig()
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(redisTemplate.getValueSerializer()))
                 .entryTtl(Duration.ofSeconds(ttl));
     }
+
 }

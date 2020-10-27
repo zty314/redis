@@ -27,12 +27,12 @@ public class PwdDecOrEnc {
         config.setAlgorithm("PBEWithMD5AndDES");
         config.setPassword("l&id81!lw");
         encryptor.setConfig(config);
-        String name = encryptor.encrypt("6379");
-        String password = encryptor.encrypt("123456");
+        String name = encryptor.encrypt("zty314");
+        String password = encryptor.encrypt("!QAZ2wsx");
 
         //解密
-        String mdName =encryptor.decrypt("1j85HnTXksumMD7A8P8q8w==");
-        String mdPassword =encryptor.decrypt("xIJQ9OWQeDfsnk6i25uPSg==");
+        String mdName =encryptor.decrypt("mlF9qW+WjcSAIItZ2xtRjQ==");
+        String mdPassword =encryptor.decrypt("FPCQx54tYPj3JBX10FnkKpzchPcnezMe");
         System.out.println(name+"----------------"+mdName);
         System.out.println(password+"----------------"+mdPassword);
     }

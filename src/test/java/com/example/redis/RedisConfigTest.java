@@ -47,6 +47,15 @@ public class RedisConfigTest {
     private ZSetOperations<String, Object> zSetOperations;  //以redis的zset类型存储java Object
 
     @Test
+    public void stringRedisTemplate() {
+        Person person = new Person("kobe","byrant");
+        person.setAddress(new Address("洛杉矶","美国"));
+        //将数据存入redis数据库
+        stringRedisTemplate.opsForValue().set("player:srt","kobe byrant",20, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set("player:rt",person,20, TimeUnit.SECONDS);
+    }
+
+    @Test
     public void testValueObj() throws Exception {
         Person person = new Person("boke", "byrant");
         person.setAddress(new Address("南京", "中国"));
