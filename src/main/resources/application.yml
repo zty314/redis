@@ -5,6 +5,16 @@ caching:
     #key是缓存名称，value是缓存有效期
     users: 10
 spring:
+  activemq:
+    user: admin
+    password: admin
+    broker-url: tcp://47.102.134.66:61616
+    in-memory: false
+    pool:
+      enabled: true
+      max-connections: 50
+    packages:
+      trust-all: true   #是否信任所有包，信任后所有包内的对象均可序列化传输
   redis:
     database: 0
     host: ENC(v7wYA0vNaELoKwRl4jqzk7PLyTZ8d1H5)
@@ -65,3 +75,14 @@ minio:
   endpoint: http://47.102.134.66:9000
   accessKey: PStwBjhgQ1Oee/zHcyP6Qg== # zty314
   secretKey: m22LcoMpFeaMt/oz0M3+Qx984Rw8ASvd # !QAZ2wsx
+
+#默认ActiveMQ只支持点对点模型，想要开启发布订阅模型，需要进行配置
+jms:
+  pub-sub-domain: true
+
+#rocketmq配置
+rocketmq:
+  name-server: 47.102.134.66:9876 # 自己的RocketMQ服务地址
+  producer:
+    send-message-timeout: 300000
+    group: launch-group
